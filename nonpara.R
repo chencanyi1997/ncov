@@ -8,7 +8,7 @@ data <- read_csv('./Wuhan-2019-nCoV.csv')
 N_data <- read_csv('./常住人口.csv',skip = 3)
 N_data <- na.omit(N_data)
 # data <- read_csv('https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv')
-pName <- '北京市'
+pName <- '浙江省'
 data_p <- data[!is.na(data$province) & data$province == pName & is.na(data$city),]
 date <- data_p$date
 idx <- 1:length(date)
@@ -46,11 +46,11 @@ S <- N - R - I
 S.fit <- npreg(S~idx, regtype = "ll",
                bwmethod = "cv.aic",
                gradient = TRUE)
-plot(idx,S/max(S), xlab = 'date',
-     ylab = 'Infected Number',
+plot(idx,S, xlab = 'date',
+     ylab = 'Susceptible Number',
      cex = .2)
-lines(idx,fitted(S.fit)/max(S),col = 'blue')
-lines(idx,dS/max(dS),col = 'red')
+lines(idx,fitted(S.fit),col = 'blue')
+plot(idx,dS,col = 'red')
 
 ## estimate parameters
 dI <- gradients(I.fit)
@@ -73,3 +73,4 @@ R0 <- r_beta/gamma
 
 plot(tail(idx,5),tail(R0,5),cex = .3)
 mean(R0,trim = 0.2)
+mean(tail(R0,10))
